@@ -4,7 +4,7 @@
 // - protoc             v3.19.4
 // source: domain.proto
 
-package domain_api
+package portal_apis
 
 import (
 	context "context"

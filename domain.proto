@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package domainService;
 
-option go_package = "github.com/hm-edu/domain-api";
+option go_package = "github.com/hm-edu/portal-apis";
 
 service DomainService {
     rpc CheckPermission(CheckPermissionRequest) returns (CheckPermissionResponse) {}

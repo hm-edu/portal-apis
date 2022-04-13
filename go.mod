@@ -1,4 +1,4 @@
-module github.com/hm-edu/domain-api
+module github.com/hm-edu/portal-apis
 
 go 1.18
 
