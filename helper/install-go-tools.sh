@@ -1,12 +1,12 @@
 #!/bin/bash
-GOPATH="$(go env GOPATH)/bin"
-PATH="$PATH:$HOME/.local/protoc/bin:$GOPATH"
 
-install_dependencies() {
+install_dependencies() {    
+    GOPATH="$(go env GOPATH)/bin"
+    PATH="$PATH:$HOME/.local/protoc/bin:$GOPATH"
     PB_REL="https://github.com/protocolbuffers/protobuf/releases"
     VERSION="protoc-3.19.4-linux-x86_64.zip"
     curl -LO $PB_REL/download/v3.19.4/$VERSION
-
+    mkdir -p $HOME/.local/protoc
     unzip $VERSION -d $HOME/.local/protoc
     rm $VERSION
 
@@ -19,6 +19,9 @@ install_dependencies() {
 }
 
 go_protoc() {
+
+    GOPATH="$(go env GOPATH)/bin"
+    PATH="$PATH:$HOME/.local/protoc/bin:$GOPATH"
     # shellcheck disable=2035
     protoc \
     -I $HOME/.local/protoc/include -I. \

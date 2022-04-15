@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package pkiService;
+
+option go_package = "github.com/hm-edu/portal-apis";
+import "google/protobuf/timestamp.proto";
+
+service SSLService {
+  rpc ListCertificates(ListRequest) returns (ListResponse);
+  rpc Details(DetailsRequest) returns (CertificateDetails);
+  rpc IssueCertificate(IssueRequest) returns (IssueResponse);
+  rpc RevokeCertificate(RevokeRequest) returns (RevokeResponse);
+}
+
+message ListRequest {
+  repeated string domains = 1;
+  string status = 2;
+}
+
+message DetailsRequest {
+    oneof identifier {
+        int32 id = 1;
+        string serial = 2;
+    }    
+}
+
+message CertificateDetails {
+    int32 id = 1;
+    string common_name = 2;
+    string status = 3;
+    string serial = 4;
+    string subject_alternative_names = 5;
+    google.protobuf.Timestamp expires = 6; 
+}
+
+message ListResponse {
+    message ListItem {
+        int32 id = 1;
+        string common_name = 2;
+        repeated string subject_alternative_names = 3;
+        string serial = 4; 
+    }
+    repeated ListItem items = 1;
+}
+
+message IssueRequest {
+    string csr = 1;
+    repeated string subject_alternative_names = 2;
+}
+
+message IssueResponse {
+    string certificate = 1;
+}
+
+message RevokeRequest {
+    oneof identifier {
+        int32 id = 1;
+        string serial = 2;
+        string common_name = 3;
+    }
+}
+
+message RevokeResponse {
+
+}
