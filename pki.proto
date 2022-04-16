@@ -55,7 +55,7 @@ message CertificateDetails {
   string common_name = 2;
   string status = 3;
   string serial = 4;
-  string subject_alternative_names = 5;
+  repeated string subject_alternative_names = 5;
   google.protobuf.Timestamp expires = 6;
   google.protobuf.Timestamp notBefore = 7;
 }
