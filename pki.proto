@@ -20,10 +20,10 @@ service SmimeService {
 
 message RevokeSmimeRequest {
   oneof identifier {
-    int32 orderNumber = 1;
-    string serial = 2;
-    string email = 3;
+    string serial = 1;
+    string email = 2;
   }
+  string reason = 3;
 }
 
 message ListSmimeRequest { string email = 1; }
@@ -70,9 +70,9 @@ message IssueSslRequest {
 message IssueSslResponse { string certificate = 1; }
 
 message RevokeSslRequest {
-  oneof identifier {
-    int32 id = 1;
-    string serial = 2;
-    string common_name = 3;
+  oneof identifier {    
+    string serial = 1;
+    string common_name = 2;
   }
+  string reason = 3;
 }
