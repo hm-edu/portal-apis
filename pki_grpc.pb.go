@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,10 +23,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SSLServiceClient interface {
-	ListCertificates(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	Details(ctx context.Context, in *DetailsRequest, opts ...grpc.CallOption) (*CertificateDetails, error)
-	IssueCertificate(ctx context.Context, in *IssueRequest, opts ...grpc.CallOption) (*IssueResponse, error)
-	RevokeCertificate(ctx context.Context, in *RevokeRequest, opts ...grpc.CallOption) (*RevokeResponse, error)
+	ListCertificates(ctx context.Context, in *ListSslRequest, opts ...grpc.CallOption) (*ListSslResponse, error)
+	IssueCertificate(ctx context.Context, in *IssueSslRequest, opts ...grpc.CallOption) (*IssueSslResponse, error)
+	RevokeCertificate(ctx context.Context, in *RevokeSslRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type sSLServiceClient struct {
@@ -36,8 +36,8 @@ func NewSSLServiceClient(cc grpc.ClientConnInterface) SSLServiceClient {
 	return &sSLServiceClient{cc}
 }
 
-func (c *sSLServiceClient) ListCertificates(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	out := new(ListResponse)
+func (c *sSLServiceClient) ListCertificates(ctx context.Context, in *ListSslRequest, opts ...grpc.CallOption) (*ListSslResponse, error) {
+	out := new(ListSslResponse)
 	err := c.cc.Invoke(ctx, "/pkiService.SSLService/ListCertificates", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -45,17 +45,8 @@ func (c *sSLServiceClient) ListCertificates(ctx context.Context, in *ListRequest
 	return out, nil
 }
 
-func (c *sSLServiceClient) Details(ctx context.Context, in *DetailsRequest, opts ...grpc.CallOption) (*CertificateDetails, error) {
-	out := new(CertificateDetails)
-	err := c.cc.Invoke(ctx, "/pkiService.SSLService/Details", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *sSLServiceClient) IssueCertificate(ctx context.Context, in *IssueRequest, opts ...grpc.CallOption) (*IssueResponse, error) {
-	out := new(IssueResponse)
+func (c *sSLServiceClient) IssueCertificate(ctx context.Context, in *IssueSslRequest, opts ...grpc.CallOption) (*IssueSslResponse, error) {
+	out := new(IssueSslResponse)
 	err := c.cc.Invoke(ctx, "/pkiService.SSLService/IssueCertificate", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -63,8 +54,8 @@ func (c *sSLServiceClient) IssueCertificate(ctx context.Context, in *IssueReques
 	return out, nil
 }
 
-func (c *sSLServiceClient) RevokeCertificate(ctx context.Context, in *RevokeRequest, opts ...grpc.CallOption) (*RevokeResponse, error) {
-	out := new(RevokeResponse)
+func (c *sSLServiceClient) RevokeCertificate(ctx context.Context, in *RevokeSslRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/pkiService.SSLService/RevokeCertificate", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,10 +67,9 @@ func (c *sSLServiceClient) RevokeCertificate(ctx context.Context, in *RevokeRequ
 // All implementations must embed UnimplementedSSLServiceServer
 // for forward compatibility
 type SSLServiceServer interface {
-	ListCertificates(context.Context, *ListRequest) (*ListResponse, error)
-	Details(context.Context, *DetailsRequest) (*CertificateDetails, error)
-	IssueCertificate(context.Context, *IssueRequest) (*IssueResponse, error)
-	RevokeCertificate(context.Context, *RevokeRequest) (*RevokeResponse, error)
+	ListCertificates(context.Context, *ListSslRequest) (*ListSslResponse, error)
+	IssueCertificate(context.Context, *IssueSslRequest) (*IssueSslResponse, error)
+	RevokeCertificate(context.Context, *RevokeSslRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedSSLServiceServer()
 }
 
@@ -87,16 +77,13 @@ type SSLServiceServer interface {
 type UnimplementedSSLServiceServer struct {
 }
 
-func (UnimplementedSSLServiceServer) ListCertificates(context.Context, *ListRequest) (*ListResponse, error) {
+func (UnimplementedSSLServiceServer) ListCertificates(context.Context, *ListSslRequest) (*ListSslResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCertificates not implemented")
 }
-func (UnimplementedSSLServiceServer) Details(context.Context, *DetailsRequest) (*CertificateDetails, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Details not implemented")
-}
-func (UnimplementedSSLServiceServer) IssueCertificate(context.Context, *IssueRequest) (*IssueResponse, error) {
+func (UnimplementedSSLServiceServer) IssueCertificate(context.Context, *IssueSslRequest) (*IssueSslResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IssueCertificate not implemented")
 }
-func (UnimplementedSSLServiceServer) RevokeCertificate(context.Context, *RevokeRequest) (*RevokeResponse, error) {
+func (UnimplementedSSLServiceServer) RevokeCertificate(context.Context, *RevokeSslRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RevokeCertificate not implemented")
 }
 func (UnimplementedSSLServiceServer) mustEmbedUnimplementedSSLServiceServer() {}
@@ -113,7 +100,7 @@ func RegisterSSLServiceServer(s grpc.ServiceRegistrar, srv SSLServiceServer) {
 }
 
 func _SSLService_ListCertificates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRequest)
+	in := new(ListSslRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -125,31 +112,13 @@ func _SSLService_ListCertificates_Handler(srv interface{}, ctx context.Context, 
 		FullMethod: "/pkiService.SSLService/ListCertificates",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SSLServiceServer).ListCertificates(ctx, req.(*ListRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SSLService_Details_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DetailsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SSLServiceServer).Details(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/pkiService.SSLService/Details",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SSLServiceServer).Details(ctx, req.(*DetailsRequest))
+		return srv.(SSLServiceServer).ListCertificates(ctx, req.(*ListSslRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _SSLService_IssueCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IssueRequest)
+	in := new(IssueSslRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -161,13 +130,13 @@ func _SSLService_IssueCertificate_Handler(srv interface{}, ctx context.Context, 
 		FullMethod: "/pkiService.SSLService/IssueCertificate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SSLServiceServer).IssueCertificate(ctx, req.(*IssueRequest))
+		return srv.(SSLServiceServer).IssueCertificate(ctx, req.(*IssueSslRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _SSLService_RevokeCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RevokeRequest)
+	in := new(RevokeSslRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -179,7 +148,7 @@ func _SSLService_RevokeCertificate_Handler(srv interface{}, ctx context.Context,
 		FullMethod: "/pkiService.SSLService/RevokeCertificate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SSLServiceServer).RevokeCertificate(ctx, req.(*RevokeRequest))
+		return srv.(SSLServiceServer).RevokeCertificate(ctx, req.(*RevokeSslRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -196,16 +165,170 @@ var SSLService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SSLService_ListCertificates_Handler,
 		},
 		{
-			MethodName: "Details",
-			Handler:    _SSLService_Details_Handler,
-		},
-		{
 			MethodName: "IssueCertificate",
 			Handler:    _SSLService_IssueCertificate_Handler,
 		},
 		{
 			MethodName: "RevokeCertificate",
 			Handler:    _SSLService_RevokeCertificate_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "pki.proto",
+}
+
+// SmimeServiceClient is the client API for SmimeService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type SmimeServiceClient interface {
+	ListCertificates(ctx context.Context, in *ListSmimeRequest, opts ...grpc.CallOption) (*ListSmimeResponse, error)
+	IssueCertificate(ctx context.Context, in *IssueSmimeRequest, opts ...grpc.CallOption) (*IssueSmimeResponse, error)
+	RevokeCertificate(ctx context.Context, in *RevokeSmimeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+}
+
+type smimeServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewSmimeServiceClient(cc grpc.ClientConnInterface) SmimeServiceClient {
+	return &smimeServiceClient{cc}
+}
+
+func (c *smimeServiceClient) ListCertificates(ctx context.Context, in *ListSmimeRequest, opts ...grpc.CallOption) (*ListSmimeResponse, error) {
+	out := new(ListSmimeResponse)
+	err := c.cc.Invoke(ctx, "/pkiService.SmimeService/ListCertificates", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *smimeServiceClient) IssueCertificate(ctx context.Context, in *IssueSmimeRequest, opts ...grpc.CallOption) (*IssueSmimeResponse, error) {
+	out := new(IssueSmimeResponse)
+	err := c.cc.Invoke(ctx, "/pkiService.SmimeService/IssueCertificate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *smimeServiceClient) RevokeCertificate(ctx context.Context, in *RevokeSmimeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/pkiService.SmimeService/RevokeCertificate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SmimeServiceServer is the server API for SmimeService service.
+// All implementations must embed UnimplementedSmimeServiceServer
+// for forward compatibility
+type SmimeServiceServer interface {
+	ListCertificates(context.Context, *ListSmimeRequest) (*ListSmimeResponse, error)
+	IssueCertificate(context.Context, *IssueSmimeRequest) (*IssueSmimeResponse, error)
+	RevokeCertificate(context.Context, *RevokeSmimeRequest) (*emptypb.Empty, error)
+	mustEmbedUnimplementedSmimeServiceServer()
+}
+
+// UnimplementedSmimeServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedSmimeServiceServer struct {
+}
+
+func (UnimplementedSmimeServiceServer) ListCertificates(context.Context, *ListSmimeRequest) (*ListSmimeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCertificates not implemented")
+}
+func (UnimplementedSmimeServiceServer) IssueCertificate(context.Context, *IssueSmimeRequest) (*IssueSmimeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IssueCertificate not implemented")
+}
+func (UnimplementedSmimeServiceServer) RevokeCertificate(context.Context, *RevokeSmimeRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeCertificate not implemented")
+}
+func (UnimplementedSmimeServiceServer) mustEmbedUnimplementedSmimeServiceServer() {}
+
+// UnsafeSmimeServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SmimeServiceServer will
+// result in compilation errors.
+type UnsafeSmimeServiceServer interface {
+	mustEmbedUnimplementedSmimeServiceServer()
+}
+
+func RegisterSmimeServiceServer(s grpc.ServiceRegistrar, srv SmimeServiceServer) {
+	s.RegisterService(&SmimeService_ServiceDesc, srv)
+}
+
+func _SmimeService_ListCertificates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSmimeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SmimeServiceServer).ListCertificates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pkiService.SmimeService/ListCertificates",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SmimeServiceServer).ListCertificates(ctx, req.(*ListSmimeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SmimeService_IssueCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IssueSmimeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SmimeServiceServer).IssueCertificate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pkiService.SmimeService/IssueCertificate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SmimeServiceServer).IssueCertificate(ctx, req.(*IssueSmimeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SmimeService_RevokeCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeSmimeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SmimeServiceServer).RevokeCertificate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pkiService.SmimeService/RevokeCertificate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SmimeServiceServer).RevokeCertificate(ctx, req.(*RevokeSmimeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// SmimeService_ServiceDesc is the grpc.ServiceDesc for SmimeService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var SmimeService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "pkiService.SmimeService",
+	HandlerType: (*SmimeServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "ListCertificates",
+			Handler:    _SmimeService_ListCertificates_Handler,
+		},
+		{
+			MethodName: "IssueCertificate",
+			Handler:    _SmimeService_IssueCertificate_Handler,
+		},
+		{
+			MethodName: "RevokeCertificate",
+			Handler:    _SmimeService_RevokeCertificate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
