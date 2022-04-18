@@ -34,6 +34,7 @@ message IssueSmimeRequest {
   string firstName = 3;
   string lastName = 4;
   string middleName = 5;
+  string commonName = 6;
 }
 
 message IssueSmimeResponse { string certificate = 1; }
