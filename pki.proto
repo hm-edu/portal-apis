@@ -39,10 +39,13 @@ message IssueSmimeRequest {
 message IssueSmimeResponse { string certificate = 1; }
 
 message ListSmimeResponse {
-  int32 id = 1;
-  string status = 2;
-  string serial = 3;
-  google.protobuf.Timestamp expires = 4;
+  message CertificateDetails {
+    int32 id = 1;
+    string status = 2;
+    string serial = 3;
+    google.protobuf.Timestamp expires = 4;
+  }
+  repeated CertificateDetails certificates = 1;
 }
 
 message ListSslRequest {
@@ -50,17 +53,18 @@ message ListSslRequest {
   string status = 2;
 }
 
-message CertificateDetails {
-  int32 id = 1;
-  string common_name = 2;
-  string status = 3;
-  string serial = 4;
-  repeated string subject_alternative_names = 5;
-  google.protobuf.Timestamp expires = 6;
-  google.protobuf.Timestamp notBefore = 7;
+message ListSslResponse {
+  message CertificateDetails {
+    int32 id = 1;
+    string common_name = 2;
+    string status = 3;
+    string serial = 4;
+    repeated string subject_alternative_names = 5;
+    google.protobuf.Timestamp expires = 6;
+    google.protobuf.Timestamp notBefore = 7;
+  }
+  repeated CertificateDetails items = 1;
 }
-
-message ListSslResponse { repeated CertificateDetails items = 1; }
 
 message IssueSslRequest {
   string csr = 1;
@@ -70,7 +74,7 @@ message IssueSslRequest {
 message IssueSslResponse { string certificate = 1; }
 
 message RevokeSslRequest {
-  oneof identifier {    
+  oneof identifier {
     string serial = 1;
     string common_name = 2;
   }
