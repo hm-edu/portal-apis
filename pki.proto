@@ -8,6 +8,7 @@ import "google/protobuf/empty.proto";
 
 service SSLService {
   rpc ListCertificates(ListSslRequest) returns (ListSslResponse);
+  rpc CertificateDetails(CertificateDetailsRequest) returns (SslCertificateDetails);
   rpc IssueCertificate(IssueSslRequest) returns (IssueSslResponse);
   rpc RevokeCertificate(RevokeSslRequest) returns (google.protobuf.Empty);
 }
@@ -54,23 +55,25 @@ message ListSslRequest {
   string status = 2;
 }
 
-message ListSslResponse {
-  message CertificateDetails {
-    int32 id = 1;
-    string common_name = 2;
-    string status = 3;
-    string serial = 4;
-    repeated string subject_alternative_names = 5;
-    google.protobuf.Timestamp expires = 6;
-    google.protobuf.Timestamp notBefore = 7;
-  }
-  repeated CertificateDetails items = 1;
+message SslCertificateDetails {
+  int32 id = 1;
+  string common_name = 2;
+  string status = 3;
+  string serial = 4;
+  repeated string subject_alternative_names = 5;
+  google.protobuf.Timestamp expires = 6;
+  google.protobuf.Timestamp notBefore = 7;
 }
+
+message ListSslResponse { repeated SslCertificateDetails items = 1; }
+
+message CertificateDetailsRequest { string serial = 1; }
 
 message IssueSslRequest {
   string csr = 1;
   repeated string subject_alternative_names = 2;
 }
+
 
 message IssueSslResponse { string certificate = 1; }
 

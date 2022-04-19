@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SSLServiceClient interface {
 	ListCertificates(ctx context.Context, in *ListSslRequest, opts ...grpc.CallOption) (*ListSslResponse, error)
+	CertificateDetails(ctx context.Context, in *CertificateDetailsRequest, opts ...grpc.CallOption) (*SslCertificateDetails, error)
 	IssueCertificate(ctx context.Context, in *IssueSslRequest, opts ...grpc.CallOption) (*IssueSslResponse, error)
 	RevokeCertificate(ctx context.Context, in *RevokeSslRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -39,6 +40,15 @@ func NewSSLServiceClient(cc grpc.ClientConnInterface) SSLServiceClient {
 func (c *sSLServiceClient) ListCertificates(ctx context.Context, in *ListSslRequest, opts ...grpc.CallOption) (*ListSslResponse, error) {
 	out := new(ListSslResponse)
 	err := c.cc.Invoke(ctx, "/pkiService.SSLService/ListCertificates", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sSLServiceClient) CertificateDetails(ctx context.Context, in *CertificateDetailsRequest, opts ...grpc.CallOption) (*SslCertificateDetails, error) {
+	out := new(SslCertificateDetails)
+	err := c.cc.Invoke(ctx, "/pkiService.SSLService/CertificateDetails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,6 +78,7 @@ func (c *sSLServiceClient) RevokeCertificate(ctx context.Context, in *RevokeSslR
 // for forward compatibility
 type SSLServiceServer interface {
 	ListCertificates(context.Context, *ListSslRequest) (*ListSslResponse, error)
+	CertificateDetails(context.Context, *CertificateDetailsRequest) (*SslCertificateDetails, error)
 	IssueCertificate(context.Context, *IssueSslRequest) (*IssueSslResponse, error)
 	RevokeCertificate(context.Context, *RevokeSslRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedSSLServiceServer()
@@ -79,6 +90,9 @@ type UnimplementedSSLServiceServer struct {
 
 func (UnimplementedSSLServiceServer) ListCertificates(context.Context, *ListSslRequest) (*ListSslResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCertificates not implemented")
+}
+func (UnimplementedSSLServiceServer) CertificateDetails(context.Context, *CertificateDetailsRequest) (*SslCertificateDetails, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CertificateDetails not implemented")
 }
 func (UnimplementedSSLServiceServer) IssueCertificate(context.Context, *IssueSslRequest) (*IssueSslResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IssueCertificate not implemented")
@@ -113,6 +127,24 @@ func _SSLService_ListCertificates_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SSLServiceServer).ListCertificates(ctx, req.(*ListSslRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SSLService_CertificateDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CertificateDetailsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SSLServiceServer).CertificateDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pkiService.SSLService/CertificateDetails",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SSLServiceServer).CertificateDetails(ctx, req.(*CertificateDetailsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -163,6 +195,10 @@ var SSLService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListCertificates",
 			Handler:    _SSLService_ListCertificates_Handler,
+		},
+		{
+			MethodName: "CertificateDetails",
+			Handler:    _SSLService_CertificateDetails_Handler,
 		},
 		{
 			MethodName: "IssueCertificate",
