@@ -72,6 +72,7 @@ message CertificateDetailsRequest { string serial = 1; }
 message IssueSslRequest {
   string csr = 1;
   repeated string subject_alternative_names = 2;
+  string acme_order = 3;
 }
 
 
