@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package eabService;
+
+option go_package = "github.com/hm-edu/portal-apis";
+
+service EABService {
+  rpc CheckEABPermissions(CheckEABPermissionRequest)
+      returns (CheckEABPermissionResponse);
+}
+
+message CheckEABPermissionRequest {
+  repeated string domains = 1;
+  string eab_key = 2;
+}
+
+message CheckEABPermissionResponse { repeated string missing = 1; }

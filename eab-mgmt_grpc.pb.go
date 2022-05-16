@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.20.1
-// source: eab.proto
+// source: eab-mgmt.proto
 
 package portal_apis
 
@@ -101,5 +101,5 @@ var EABService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "eab.proto",
+	Metadata: "eab-mgmt.proto",
 }
