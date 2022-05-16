@@ -63,6 +63,8 @@ message SslCertificateDetails {
   repeated string subject_alternative_names = 5;
   google.protobuf.Timestamp expires = 6;
   google.protobuf.Timestamp notBefore = 7;
+  string issued_by = 8;
+  google.protobuf.Timestamp created = 9;
 }
 
 message ListSslResponse { repeated SslCertificateDetails items = 1; }
@@ -73,6 +75,7 @@ message IssueSslRequest {
   string csr = 1;
   repeated string subject_alternative_names = 2;
   reserved 3;
+  string issuer = 4;
 }
 
 
