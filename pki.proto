@@ -32,10 +32,10 @@ message ListSmimeRequest { string email = 1; }
 message IssueSmimeRequest {
   string csr = 1;
   string email = 2;
-  string firstName = 3;
-  string lastName = 4;
-  string middleName = 5;
-  string commonName = 6;
+  string first_name = 3;
+  string last_name = 4;
+  string middle_name = 5;
+  string common_name = 6;
 }
 
 message IssueSmimeResponse { string certificate = 1; }
@@ -62,7 +62,7 @@ message SslCertificateDetails {
   string serial = 4;
   repeated string subject_alternative_names = 5;
   google.protobuf.Timestamp expires = 6;
-  google.protobuf.Timestamp notBefore = 7;
+  google.protobuf.Timestamp not_before = 7;
   string issued_by = 8;
   google.protobuf.Timestamp created = 9;
 }
