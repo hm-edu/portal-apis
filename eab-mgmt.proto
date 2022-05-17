@@ -7,6 +7,8 @@ option go_package = "github.com/hm-edu/portal-apis";
 service EABService {
   rpc CheckEABPermissions(CheckEABPermissionRequest)
       returns (CheckEABPermissionResponse);
+  rpc ResolveAccountId(ResolveAccountIdRequest)
+      returns (ResolveAccountIdResponse);
 }
 
 message CheckEABPermissionRequest {
@@ -15,3 +17,10 @@ message CheckEABPermissionRequest {
 }
 
 message CheckEABPermissionResponse { repeated string missing = 1; }
+
+message ResolveAccountIdRequest { string account_id = 1; }
+
+message ResolveAccountIdResponse {
+  string eab_key = 1;
+  string user = 2;
+}

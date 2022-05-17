@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type EABServiceClient interface {
 	CheckEABPermissions(ctx context.Context, in *CheckEABPermissionRequest, opts ...grpc.CallOption) (*CheckEABPermissionResponse, error)
+	ResolveAccountId(ctx context.Context, in *ResolveAccountIdRequest, opts ...grpc.CallOption) (*ResolveAccountIdResponse, error)
 }
 
 type eABServiceClient struct {
@@ -42,11 +43,21 @@ func (c *eABServiceClient) CheckEABPermissions(ctx context.Context, in *CheckEAB
 	return out, nil
 }
 
+func (c *eABServiceClient) ResolveAccountId(ctx context.Context, in *ResolveAccountIdRequest, opts ...grpc.CallOption) (*ResolveAccountIdResponse, error) {
+	out := new(ResolveAccountIdResponse)
+	err := c.cc.Invoke(ctx, "/eabService.EABService/ResolveAccountId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EABServiceServer is the server API for EABService service.
 // All implementations must embed UnimplementedEABServiceServer
 // for forward compatibility
 type EABServiceServer interface {
 	CheckEABPermissions(context.Context, *CheckEABPermissionRequest) (*CheckEABPermissionResponse, error)
+	ResolveAccountId(context.Context, *ResolveAccountIdRequest) (*ResolveAccountIdResponse, error)
 	mustEmbedUnimplementedEABServiceServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedEABServiceServer struct {
 
 func (UnimplementedEABServiceServer) CheckEABPermissions(context.Context, *CheckEABPermissionRequest) (*CheckEABPermissionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckEABPermissions not implemented")
+}
+func (UnimplementedEABServiceServer) ResolveAccountId(context.Context, *ResolveAccountIdRequest) (*ResolveAccountIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResolveAccountId not implemented")
 }
 func (UnimplementedEABServiceServer) mustEmbedUnimplementedEABServiceServer() {}
 
@@ -88,6 +102,24 @@ func _EABService_CheckEABPermissions_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EABService_ResolveAccountId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResolveAccountIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EABServiceServer).ResolveAccountId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eabService.EABService/ResolveAccountId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EABServiceServer).ResolveAccountId(ctx, req.(*ResolveAccountIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // EABService_ServiceDesc is the grpc.ServiceDesc for EABService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var EABService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckEABPermissions",
 			Handler:    _EABService_CheckEABPermissions_Handler,
+		},
+		{
+			MethodName: "ResolveAccountId",
+			Handler:    _EABService_ResolveAccountId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
