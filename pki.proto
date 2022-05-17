@@ -52,7 +52,7 @@ message ListSmimeResponse {
 
 message ListSslRequest {
   repeated string domains = 1;
-  string status = 2;
+  bool include_partial = 2;
 }
 
 message SslCertificateDetails {
