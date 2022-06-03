@@ -65,6 +65,7 @@ message SslCertificateDetails {
   google.protobuf.Timestamp not_before = 7;
   string issued_by = 8;
   google.protobuf.Timestamp created = 9;
+  string source = 10;
 }
 
 message ListSslResponse { repeated SslCertificateDetails items = 1; }
@@ -76,6 +77,7 @@ message IssueSslRequest {
   repeated string subject_alternative_names = 2;
   reserved 3;
   string issuer = 4;
+  string source = 5;
 }
 
 
