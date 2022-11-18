@@ -36,6 +36,7 @@ message IssueSmimeRequest {
   string last_name = 4;
   string middle_name = 5;
   string common_name = 6;
+  bool student = 7;
 }
 
 message IssueSmimeResponse { string certificate = 1; }
