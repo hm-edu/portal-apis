@@ -4,7 +4,7 @@ install_dependencies() {
     GOPATH="$(go env GOPATH)/bin"
     PATH="$PATH:$HOME/.local/protoc/bin:$GOPATH"
     PB_REL="https://github.com/protocolbuffers/protobuf/releases"
-    VERSION="protoc-21.1-linux-x86_64.zip"
+    VERSION="protoc-21.1-osx-aarch_64.zip"
     curl -LO $PB_REL/download/v21.1/$VERSION
     mkdir -p $HOME/.local/protoc
     unzip $VERSION -d $HOME/.local/protoc
