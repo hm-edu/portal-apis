@@ -69,6 +69,7 @@ message SslCertificateDetails {
   google.protobuf.Timestamp created = 9;
   string source = 10;
   int32 db_id = 11;
+  string issuer = 12;
 }
 
 message ListSslResponse { repeated SslCertificateDetails items = 1; }
