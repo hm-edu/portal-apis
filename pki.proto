@@ -70,6 +70,7 @@ message SslCertificateDetails {
   string source = 10;
   int32 db_id = 11;
   string ca = 12;
+  string transaction_id = 13;
 }
 
 message ListSslResponse { repeated SslCertificateDetails items = 1; }
